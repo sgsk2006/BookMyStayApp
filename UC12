@@ -1,0 +1,70 @@
+import java.io.*;
+import java.util.*;
+
+class Reservation implements Serializable {
+    String id;
+    String name;
+    String roomType;
+
+    Reservation(String id, String name, String roomType) {
+        this.id = id;
+        this.name = name;
+        this.roomType = roomType;
+    }
+}
+
+class SystemState implements Serializable {
+    HashMap<String, Integer> inventory;
+    List<Reservation> bookings;
+
+    SystemState(HashMap<String, Integer> inventory, List<Reservation> bookings) {
+        this.inventory = inventory;
+        this.bookings = bookings;
+    }
+}
+
+public class UseCase12DataPersistenceRecovery {
+    public static void main(String[] args) {
+        System.out.println("Welcome to Book My Stay App");
+        System.out.println("Version: 12.0");
+
+        String file = "data.ser";
+
+        HashMap<String, Integer> inventory = new HashMap<>();
+        List<Reservation> bookings = new ArrayList<>();
+
+        try {
+            ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
+            SystemState state = (SystemState) in.readObject();
+            inventory = state.inventory;
+            bookings = state.bookings;
+            in.close();
+            System.out.println("Data loaded from file");
+        } catch(Exception e) {
+            inventory.put("Single Room", 2);
+            inventory.put("Double Room", 1);
+            bookings.add(new Reservation("R1", "Alice", "Single Room"));
+            bookings.add(new Reservation("R2", "Bob", "Double Room"));
+            System.out.println("No previous data found, initialized new data");
+        }
+
+        System.out.println("Current Inventory:");
+        for(String key : inventory.keySet()) {
+            System.out.println(key + " Available: " + inventory.get(key));
+        }
+
+        System.out.println("Bookings:");
+        for(Reservation r : bookings) {
+            System.out.println(r.id + " " + r.name + " " + r.roomType);
+        }
+
+        try {
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
+            out.writeObject(new SystemState(inventory, bookings));
+            out.close();
+            System.out.println("Data saved to file");
+        } catch(Exception e) {
+            System.out.println("Error saving data");
+        }
+    }
+}

@@ -1,0 +1,36 @@
+import java.util.Queue;
+import java.util.LinkedList;
+
+class Reservation {
+    String name;
+    String roomType;
+
+    Reservation(String name, String roomType) {
+        this.name = name;
+        this.roomType = roomType;
+    }
+
+    void display() {
+        System.out.println("Guest: " + name + " Requested: " + roomType);
+    }
+}
+
+public class UseCase5BookingRequestQueue {
+    public static void main(String[] args) {
+        System.out.println("Welcome to Book My Stay App");
+        System.out.println("Version: 5.0");
+
+        Queue<Reservation> queue = new LinkedList<>();
+
+        queue.add(new Reservation("Alice", "Single Room"));
+        queue.add(new Reservation("Bob", "Double Room"));
+        queue.add(new Reservation("Charlie", "Suite Room"));
+
+        System.out.println("Booking Requests in Order:");
+
+        while(!queue.isEmpty()) {
+            Reservation r = queue.remove();
+            r.display();
+        }
+    }
+}

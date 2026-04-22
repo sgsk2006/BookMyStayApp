@@ -1,0 +1,42 @@
+import java.util.HashMap;
+
+class RoomInventory {
+    HashMap<String, Integer> inventory;
+
+    RoomInventory() {
+        inventory = new HashMap<>();
+    }
+
+    void addRoom(String type, int count) {
+        inventory.put(type, count);
+    }
+
+    int getAvailability(String type) {
+        return inventory.getOrDefault(type, 0);
+    }
+
+    void updateRoom(String type, int count) {
+        inventory.put(type, count);
+    }
+
+    void displayInventory() {
+        for(String key : inventory.keySet()) {
+            System.out.println(key + " Available: " + inventory.get(key));
+        }
+    }
+}
+
+public class UseCase3InventorySetup {
+    public static void main(String[] args) {
+        System.out.println("Welcome to Book My Stay App");
+        System.out.println("Version: 3.1");
+
+        RoomInventory inventory = new RoomInventory();
+
+        inventory.addRoom("Single Room", 5);
+        inventory.addRoom("Double Room", 3);
+        inventory.addRoom("Suite Room", 2);
+
+        inventory.displayInventory();
+    }
+}

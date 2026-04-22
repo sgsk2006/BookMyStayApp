@@ -1,0 +1,67 @@
+import java.util.*;
+
+class Reservation {
+    String name;
+    String roomType;
+
+    Reservation(String name, String roomType) {
+        this.name = name;
+        this.roomType = roomType;
+    }
+}
+
+class RoomInventory {
+    HashMap<String, Integer> inventory = new HashMap<>();
+
+    void addRoom(String type, int count) {
+        inventory.put(type, count);
+    }
+
+    int getAvailability(String type) {
+        return inventory.getOrDefault(type, 0);
+    }
+
+    void decrease(String type) {
+        inventory.put(type, inventory.get(type) - 1);
+    }
+}
+
+public class UseCase6RoomAllocationService {
+    public static void main(String[] args) {
+        System.out.println("Welcome to Book My Stay App");
+        System.out.println("Version: 6.0");
+
+        Queue<Reservation> queue = new LinkedList<>();
+
+        queue.add(new Reservation("Alice", "Single Room"));
+        queue.add(new Reservation("Bob", "Double Room"));
+        queue.add(new Reservation("Charlie", "Suite Room"));
+        queue.add(new Reservation("David", "Single Room"));
+
+        RoomInventory inventory = new RoomInventory();
+        inventory.addRoom("Single Room", 2);
+        inventory.addRoom("Double Room", 1);
+        inventory.addRoom("Suite Room", 1);
+
+        HashMap<String, Set<String>> allocated = new HashMap<>();
+        int id = 1;
+
+        while(!queue.isEmpty()) {
+            Reservation r = queue.remove();
+
+            if(inventory.getAvailability(r.roomType) > 0) {
+                String roomId = r.roomType.substring(0, 1) + id;
+                id++;
+
+                allocated.putIfAbsent(r.roomType, new HashSet<>());
+                allocated.get(r.roomType).add(roomId);
+
+                inventory.decrease(r.roomType);
+
+                System.out.println(r.name + " booked " + r.roomType + " Room ID: " + roomId);
+            } else {
+                System.out.println(r.name + " booking failed for " + r.roomType);
+            }
+        }
+    }
+}

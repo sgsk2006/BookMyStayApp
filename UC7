@@ -1,0 +1,46 @@
+import java.util.*;
+
+class Service {
+    String name;
+    double cost;
+
+    Service(String name, double cost) {
+        this.name = name;
+        this.cost = cost;
+    }
+}
+
+public class UseCase7AddOnServiceSelection {
+    public static void main(String[] args) {
+        System.out.println("Welcome to Book My Stay App");
+        System.out.println("Version: 7.0");
+
+        Map<String, List<Service>> serviceMap = new HashMap<>();
+
+        String reservationId1 = "R1";
+        String reservationId2 = "R2";
+
+        List<Service> services1 = new ArrayList<>();
+        services1.add(new Service("Breakfast", 200));
+        services1.add(new Service("WiFi", 100));
+
+        List<Service> services2 = new ArrayList<>();
+        services2.add(new Service("Spa", 500));
+
+        serviceMap.put(reservationId1, services1);
+        serviceMap.put(reservationId2, services2);
+
+        for(String resId : serviceMap.keySet()) {
+            System.out.println("Reservation ID: " + resId);
+            double total = 0;
+
+            for(Service s : serviceMap.get(resId)) {
+                System.out.println("Service: " + s.name + " Cost: " + s.cost);
+                total += s.cost;
+            }
+
+            System.out.println("Total Add-On Cost: " + total);
+            System.out.println();
+        }
+    }
+}

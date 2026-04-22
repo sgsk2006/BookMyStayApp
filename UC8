@@ -1,0 +1,55 @@
+import java.util.*;
+
+class Reservation {
+    String id;
+    String name;
+    String roomType;
+
+    Reservation(String id, String name, String roomType) {
+        this.id = id;
+        this.name = name;
+        this.roomType = roomType;
+    }
+
+    void display() {
+        System.out.println("ID: " + id + " Name: " + name + " Room: " + roomType);
+    }
+}
+
+class BookingHistory {
+    List<Reservation> history = new ArrayList<>();
+
+    void add(Reservation r) {
+        history.add(r);
+    }
+
+    List<Reservation> getAll() {
+        return history;
+    }
+}
+
+class BookingReportService {
+    void generateReport(List<Reservation> list) {
+        System.out.println("Booking Report");
+        for(Reservation r : list) {
+            r.display();
+        }
+        System.out.println("Total Bookings: " + list.size());
+    }
+}
+
+public class UseCase8BookingHistoryReport {
+    public static void main(String[] args) {
+        System.out.println("Welcome to Book My Stay App");
+        System.out.println("Version: 8.0");
+
+        BookingHistory bh = new BookingHistory();
+
+        bh.add(new Reservation("R1", "Alice", "Single Room"));
+        bh.add(new Reservation("R2", "Bob", "Double Room"));
+        bh.add(new Reservation("R3", "Charlie", "Suite Room"));
+
+        BookingReportService br = new BookingReportService();
+        br.generateReport(bh.getAll());
+    }
+}

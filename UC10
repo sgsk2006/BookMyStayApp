@@ -1,0 +1,72 @@
+import java.util.*;
+
+class Reservation {
+    String id;
+    String roomType;
+
+    Reservation(String id, String roomType) {
+        this.id = id;
+        this.roomType = roomType;
+    }
+}
+
+class RoomInventory {
+    HashMap<String, Integer> inventory = new HashMap<>();
+
+    void addRoom(String type, int count) {
+        inventory.put(type, count);
+    }
+
+    void increase(String type) {
+        inventory.put(type, inventory.get(type) + 1);
+    }
+
+    void decrease(String type) {
+        inventory.put(type, inventory.get(type) - 1);
+    }
+
+    int get(String type) {
+        return inventory.getOrDefault(type, 0);
+    }
+}
+
+public class UseCase10BookingCancellation {
+    public static void main(String[] args) {
+        System.out.println("Welcome to Book My Stay App");
+        System.out.println("Version: 10.0");
+
+        RoomInventory inventory = new RoomInventory();
+        inventory.addRoom("Single Room", 1);
+        inventory.addRoom("Double Room", 1);
+
+        Map<String, Reservation> bookings = new HashMap<>();
+        Stack<String> rollback = new Stack<>();
+
+        Reservation r1 = new Reservation("R1", "Single Room");
+        bookings.put(r1.id, r1);
+        inventory.decrease(r1.roomType);
+
+        System.out.println("Booked: " + r1.id);
+
+        String cancelId = "R1";
+
+        if(bookings.containsKey(cancelId)) {
+            Reservation r = bookings.get(cancelId);
+
+            rollback.push(cancelId);
+
+            inventory.increase(r.roomType);
+
+            bookings.remove(cancelId);
+
+            System.out.println("Cancelled: " + cancelId);
+        } else {
+            System.out.println("Invalid Cancellation");
+        }
+
+        System.out.println("Current Inventory:");
+        for(String key : inventory.inventory.keySet()) {
+            System.out.println(key + " Available: " + inventory.get(key));
+        }
+    }
+}
